@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>德国大选38个关键问题</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+
+        h1,
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        #intro {
+            text-align: center;
+            padding: 50px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #startBtn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #startBtn:hover {
+            background-color: #0056b3;
+        }
+
+        .question {
+            margin-bottom: 20px;
+            display: none;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .question.active {
+            display: block;
+        }
+
+        .question p {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .options {
+            margin-left: 20px;
+        }
+
+        .options label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .options label:hover {
+            color: #007BFF;
+        }
+
+        .navigation {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .navigation button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin: 0 5px;
+        }
+
+        .navigation button:hover {
+            background-color: #0056b3;
+        }
+
+        .error {
+            color: red;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .summary {
+            margin-top: 40px;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .summary h2 {
+            margin-top: 0;
+        }
+
+        .summary label {
+            display: block;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 初始页面，显示标题和介绍 -->
+<div id="intro">
+    <h1>德国大选38个关键问题</h1>
+    <h2>这是即将到来的德国大选中38个关键问题，涵盖了经济、社会、公民权利、环境、外交等领域。想不想知道自己的政治倾向？</h2>
+    <p>题目说明只是一个粗略简单的介绍，并不完整和严谨。注意，中立选项代表对此问题有所了解但是态度中立</p>
+    <p>尽可能的把自己代入成德国人可以获得更加真实的结果</p>
+    <button id="startBtn">开始答题</button>
+</div>
+<form id="surveyForm" style="display: none;">
+    <!-- 问题1 -->
+    <div class="question active" id="q1">
+        <p>1. 德国应继续在军事上支持乌克兰 </p>
+        <div class="options">
+            <label><input type="radio" name="q1" value="同意" required> 同意</label>
+            <label><input type="radio" name="q1" value="中立"> 中立</label>
+            <label><input type="radio" name="q1" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q1" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+        </div>
+        <div class="error" id="error1">请选择一个选项！</div>
+    </div>
+    <!-- 问题2 -->
+    <div class="question" id="q2">
+        <p>2. 可再生能源的发展应继续得到国家的财政支持。</p>
+        <div class="options">
+            <label><input type="radio" name="q2" value="同意" required> 同意</label>
+            <label><input type="radio" name="q2" value="中立"> 中立</label>
+            <label><input type="radio" name="q2" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q2" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+        </div>
+        <div class="error" id="error2">请选择一个选项！</div>
+    </div>
+
+    <!-- 问题3 -->
+    <div class="question" id="q3">
+        <p>3. 所有高速公路均应实施统一的限速规定。</p>
+        <p>目前部分高速公路没有统一限速</p>
+        <div class="options">
+            <label><input type="radio" name="q3" value="同意" required> 同意</label>
+            <label><input type="radio" name="q3" value="中立"> 中立</label>
+            <label><input type="radio" name="q3" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q3" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+        </div>
+        <div class="error" id="error3">请选择一个选项！</div>
+    </div>
+
+    <!-- 问题4 -->
+    <div class="question" id="q4">
+        <p>4. 通过另一个欧盟国家进入的寻求庇护者应该在德国边境被拒绝。 </p>
+        <p>根据都柏林协议，避难申请应在第一个入境的欧盟国家处理，但实际上很多人会经由第一个国家后继续前往德国</p>
+        <div class="options">
+            <label><input type="radio" name="q4" value="同意" required> 同意</label>
+            <label><input type="radio" name="q4" value="中立"> 中立</label>
+            <label><input type="radio" name="q4" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q4" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+        </div>
+        <div class="error" id="error4">请选择一个选项！</div>
+    </div>
+
+    <!-- 问题5 -->
+    <div class="question" id="q5">
+        <p>5. 新租房合同的租金应继续受到法律限制。</p>
+        <div class="options">
+            <label><input type="radio" name="q5" value="同意" required> 同意</label>
+            <label><input type="radio" name="q5" value="中立"> 中立</label>
+            <label><input type="radio" name="q5" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q5" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+        </div>
+        <div class="error" id="error5">请选择一个选项！</div>
+    </div>
+
+
+    <div class="question" id="q6">
+        <p>6. 应允许联邦警察在火车站使用自动面部识别软件。</p>
+        <div class="options">
+            <label><input type="radio" name="q6" value="同意" required> 同意</label>
+            <label><input type="radio" name="q6" value="中立"> 中立</label>
+            <label><input type="radio" name="q6" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q6" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+        </div>
+        <div class="error" id="error6">请选择一个选项！</div>
+    </div>
+
+    <div class="question" id="q7">
+        <p>7. 高耗能企业的用电成本应得到国家的经济补偿。</p>
+        <div class="options">
+            <label><input type="radio" name="q7" value="同意" required> 同意</label>
+            <label><input type="radio" name="q7" value="中立"> 中立</label>
+            <label><input type="radio" name="q7" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q7" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+        </div>
+        <div class="error" id="error7">请选择一个选项！</div>
+    </div>
+
+    <div class="question" id="q8">
+        <p>8. 所有雇员在缴费 40 年社保后就应该能够在不扣除任何费用的情况下退休。</p>
+        <div class="options">
+            <label><input type="radio" name="q8" value="同意" required> 同意</label>
+            <label><input type="radio" name="q8" value="中立"> 中立</label>
+            <label><input type="radio" name="q8" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q8" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+        </div>
+        <div class="error" id="error8">请选择一个选项！</div>
+    </div>
+
+    <div class="question" id="q9">
+        <p>9. 《基本法》的引言应继续含有“在上帝面前的责任”这句话。</p>
+        <p>提到 “我德意志人民，认识到对上帝与人类所负之责任，愿以联合欧洲中一平等分子之地位贡献世界和平，兹本制宪权力制定此基本法”。德国社会日益多元化，存在不同宗教信仰和无宗教信仰的群体。但是德国有着深厚的基督教历史文化传统，“在上帝面前的责任” 这句话是对这种传统的一种体现和延续。</p>
+        <div class="options">
+            <label><input type="radio" name="q9" value="同意" required> 同意</label>
+            <label><input type="radio" name="q9" value="中立"> 中立</label>
+            <label><input type="radio" name="q9" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q9" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+        </div>
+        <div class="error" id="error9">请选择一个选项！</div>
+    </div>
+
+    <div class="question" id="q10">
+        <p>10. 德国应继续促进从国外招聘技术人才。</p>
+        <div class="options">
+            <label><input type="radio" name="q10" value="同意" required> 同意</label>
+            <label><input type="radio" name="q10" value="中立"> 中立</label>
+            <label><input type="radio" name="q10" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q10" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+        </div>
+        <div class="error" id="error10">请选择一个选项！</div>
+    </div>
+
+    <div class="question" id="q11">
+        <p>11. 德国应重新使用核能进行发电。</p>
+        <p>德国在 2023 年 4 月 15 日关闭了最后三座核电站，正式告别核电时代</p>
+        <div class="options">
+            <label><input type="radio" name="q11" value="同意" required> 同意</label>
+            <label><input type="radio" name="q11" value="中立"> 中立</label>
+            <label><input type="radio" name="q11" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q11" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+        </div>
+        <div class="error" id="error11">请选择一个选项！</div>
+    </div>
+
+    <div class="question" id="q12">
+        <p>12. 个人所得税的最高税率应该被提高。</p>
+        <p>提高个人所得税最高税率，即高收入群体需要缴纳更多的税款。</p>
+        <div class="options">
+            <label><input type="radio" name="q12" value="同意" required> 同意</label>
+            <label><input type="radio" name="q12" value="中立"> 中立</label>
+            <label><input type="radio" name="q12" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q12" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+        </div>
+        <div class="error" id="error12">请选择一个选项！</div>
+    </div>
+
+    <div class="question" id="q13">
+        <p>13. 联邦政府应在学校政策方面获得更多权力。 </p>
+        <p>目前由各个州管理，联邦政府权力有限</p>
+        <div class="options">
+            <label><input type="radio" name="q13" value="同意" required> 同意</label>
+            <label><input type="radio" name="q13" value="中立"> 中立</label>
+            <label><input type="radio" name="q13" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q13" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+        </div>
+        <div class="error" id="error13">请选择一个选项！</div>
+    </div>
+
+    <div class="question" id="q14">
+        <p>14. 德国应继续向以色列出口武器装备。</p>
+        <div class="options">
+            <label><input type="radio" name="q14" value="同意" required> 同意</label>
+            <label><input type="radio" name="q14" value="中立"> 中立</label>
+            <label><input type="radio" name="q14" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q14" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+        </div>
+        <div class="error" id="error14">请选择一个选项！</div>
+    </div>
+
+    <div class="question" id="q15">
+        <p>15. 所有公民都应在法定健康保险公司投保。 </p>
+        <p>德国有公立和私人医疗保险系统</p>
+        <div class="options">
+            <label><input type="radio" name="q15" value="同意" required> 同意</label>
+            <label><input type="radio" name="q15" value="中立"> 中立</label>
+            <label><input type="radio" name="q15" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q15" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+        </div>
+        <div class="error" id="error15">请选择一个选项！</div>
+    </div>
+
+    <div class="question" id="q16">
+        <p>16. 上市公司董事会、监事会的法定女性配额应被取消。</p>
+        <div class="options">
+            <label><input type="radio" name="q16" value="同意" required> 同意</label>
+            <label><input type="radio" name="q16" value="中立"> 中立</label>
+            <label><input type="radio" name="q16" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q16" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+        </div>
+        <div class="error" id="error16">请选择一个选项！</div>
+    </div>
+
+    <div class="question" id="q17">
+        <p>17. 有机农业比传统农业更应该得到推广。</p>
+        <p>有机农业不使用化学合成的农药、化肥等，用有机肥、生物防治等；传统农业大量使用化学合成投入品。有机农产品更安全健康、价格高、产量相对低；传统农产品可能有残留，价格较低、产量相对高。</p>
+        <div class="options">
+            <label><input type="radio" name="q17" value="同意" required> 同意</label>
+            <label><input type="radio" name="q17" value="中立"> 中立</label>
+            <label><input type="radio" name="q17" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q17" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+        </div>
+        <div class="error" id="error17">请选择一个选项！</div>
+    </div>
+
+    <div class="question" id="q18">
+        <p>18. 联邦政府应加大打击右翼极端主义。</p>
+        <p>右翼极端主义包括但不限于极端民族主义，排外主义，种族主义</p>
+        <div class="options">
+            <label><input type="radio" name="q18" value="同意" required> 同意</label>
+            <label><input type="radio" name="q18" value="中立"> 中立</label>
+            <label><input type="radio" name="q18" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q18" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+        </div>
+        <div class="error" id="error18">请选择一个选项！</div>
+    </div>
+
+    <div class="question" id="q19">
+        <p>19. 企业应继续监督其供应链上所有供应商的人权和环境保护情况。</p>
+        <div class="options">
+            <label><input type="radio" name="q19" value="同意" required> 同意</label>
+            <label><input type="radio" name="q19" value="中立"> 中立</label>
+            <label><input type="radio" name="q19" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q19" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+        </div>
+        <div class="error" id="error19">请选择一个选项！</div>
+    </div>
+
+    <div class="question" id="q20">
+        <p>20. 职业教育资助（类似于助学基金）应继续根据父母收入发放。</p>
+        <div class="options">
+            <label><input type="radio" name="q20" value="同意" required> 同意</label>
+            <label><input type="radio" name="q20" value="中立"> 中立</label>
+            <label><input type="radio" name="q20" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q20" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+        </div>
+        <div class="error" id="error20">请选择一个选项！</div>
+    </div>
+
+    <div class="question" id="q21">
+        <p>21. 《基本法》中的债务刹车应予保留。 (债务刹车规定了政府债务的上限)</p>
+        <div class="options">
+            <label><input type="radio" name="q21" value="同意" required> 同意</label>
+            <label><input type="radio" name="q21" value="中立"> 中立</label>
+            <label><input type="radio" name="q21" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q21" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+        </div>
+        <div class="error" id="error21">请选择一个选项！</div>
+    </div>
+
+    <div class="question" id="q22">
+        <p>22. 德国的避难申请者在提交申请后应立即获得工作许可。</p>
+        <div class="options">
+            <label><input type="radio" name="q22" value="同意" required> 同意</label>
+            <label><input type="radio" name="q22" value="中立"> 中立</label>
+            <label><input type="radio" name="q22" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q22" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+        </div>
+        <div class="error" id="error22">请选择一个选项！</div>
+    </div>
+
+    <div class="question" id="q23">
+        <p>23. 德国应该放弃气候中和的目标。</p>
+        <div class="options">
+            <label><input type="radio" name="q23" value="同意" required> 同意</label>
+            <label><input type="radio" name="q23" value="中立"> 中立</label>
+            <label><input type="radio" name="q23" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q23" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+        </div>
+        <div class="error" id="error23">请选择一个选项！</div>
+    </div>
+
+    <div class="question" id="q24">
+        <p>24. 在德国，每周35小时将被定为所有员工的法定标准工作时间。</p>
+        <div class="options">
+            <label><input type="radio" name="q24" value="同意" required> 同意</label>
+            <label><input type="radio" name="q24" value="中立"> 中立</label>
+            <label><input type="radio" name="q24" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q24" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+        </div>
+        <div class="error" id="error24">请选择一个选项！</div>
+    </div>
+
+    <div class="question" id="q25">
+        <p>25. 在怀孕的前三个月堕胎只有在经过法律咨询后才是无罪的。</p>
+        <div class="options">
+            <label><input type="radio" name="q25" value="同意" required> 同意</label>
+            <label><input type="radio" name="q25" value="中立"> 中立</label>
+            <label><input type="radio" name="q25" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q25" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+        </div>
+        <div class="error" id="error25">请选择一个选项！</div>
+    </div>
+
+
+    <div class="question" id="q26">
+        <p>26. 德国应使用本国货币取代欧元。</p>
+        <div class="options">
+            <label><input type="radio" name="q26" value="同意" required> 同意</label>
+            <label><input type="radio" name="q26" value="中立"> 中立</label>
+            <label><input type="radio" name="q26" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q26" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+
+        </div>
+        <div class="error" id="error26">请选择一个选项！</div>
+
+    </div>
+
+    <div class="question" id="q27">
+        <p>27. 在扩大交通基础设施时，铁路应优先于公路。</p>
+        <div class="options">
+            <label><input type="radio" name="q27" value="同意" required> 同意</label>
+            <label><input type="radio" name="q27" value="中立"> 中立</label>
+            <label><input type="radio" name="q27" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q27" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+
+        </div>
+        <div class="error" id="error27">请选择一个选项！</div>
+
+    </div>
+
+    <div class="question" id="q28">
+        <p>28. 志愿活动应计入未来的养老金。</p>
+        <div class="options">
+            <label><input type="radio" name="q28" value="同意" required> 同意</label>
+            <label><input type="radio" name="q28" value="中立"> 中立</label>
+            <label><input type="radio" name="q28" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q28" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+
+        </div>
+        <div class="error" id="error28">请选择一个选项！</div>
+
+    </div>
+
+    <div class="question" id="q29">
+        <p>29. 物业税应继续转嫁给租户。</p>
+        <div class="options">
+            <label><input type="radio" name="q29" value="同意" required> 同意</label>
+            <label><input type="radio" name="q29" value="中立"> 中立</label>
+            <label><input type="radio" name="q29" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q29" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+
+        </div>
+        <div class="error" id="error29">请选择一个选项！</div>
+
+    </div>
+
+    <div class="question" id="q30">
+        <p>30. 关键基础设施公司员工的罢工权利应受到法律限制。</p>
+        <div class="options">
+            <label><input type="radio" name="q30" value="同意" required> 同意</label>
+            <label><input type="radio" name="q30" value="中立"> 中立</label>
+            <label><input type="radio" name="q30" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q30" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+
+        </div>
+        <div class="error" id="error30">请选择一个选项！</div>
+
+    </div>
+
+    <div class="question" id="q31">
+        <p>31. 德国应该在联邦层面进行全民公投。</p>
+        <p>认为德国在一些涉及国家重大事务、发展方向等问题上，应该通过全体公民直接投票的方式来做出决定</p>
+        <div class="options">
+            <label><input type="radio" name="q31" value="同意" required> 同意</label>
+            <label><input type="radio" name="q31" value="中立"> 中立</label>
+            <label><input type="radio" name="q31" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q31" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+
+        </div>
+        <div class="error" id="error31">请选择一个选项！</div>
+
+    </div>
+
+    <div class="question" id="q32">
+        <p>32. 14 岁以下的人应被追究刑事责任。</p>
+        <div class="options">
+            <label><input type="radio" name="q32" value="同意" required> 同意</label>
+            <label><input type="radio" name="q32" value="中立"> 中立</label>
+            <label><input type="radio" name="q32" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q32" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+
+        </div>
+        <div class="error" id="error32">请选择一个选项！</div>
+
+    </div>
+
+    <div class="question" id="q33">
+        <p>33. 德国应努力取消欧盟对中国电动汽车提高的关税。</p>
+        <div class="options">
+            <label><input type="radio" name="q33" value="同意" required> 同意</label>
+            <label><input type="radio" name="q33" value="中立"> 中立</label>
+            <label><input type="radio" name="q33" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q33" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+
+        </div>
+        <div class="error" id="error33">请选择一个选项！</div>
+
+    </div>
+
+    <div class="question" id="q34">
+        <p>34. 德国应继续允许公民在拥有德国国籍的同时保留第二国籍。</p>
+        <div class="options">
+            <label><input type="radio" name="q34" value="同意" required> 同意</label>
+            <label><input type="radio" name="q34" value="中立"> 中立</label>
+            <label><input type="radio" name="q34" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q34" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+
+        </div>
+        <div class="error" id="error34">请选择一个选项！</div>
+
+    </div>
+
+    <div class="question" id="q35">
+        <p>35. 年轻人应被要求进行一年强制性的社会服务。</p>
+        <div class="options">
+            <label><input type="radio" name="q35" value="同意" required> 同意</label>
+            <label><input type="radio" name="q35" value="中立"> 中立</label>
+            <label><input type="radio" name="q35" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q35" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+
+        </div>
+        <div class="error" id="error35">请选择一个选项！</div>
+
+    </div>
+
+    <div class="question" id="q36">
+        <p>36. 未来新的供暖系统应继续允许完全使用化石燃料（例如天然气或石油）运行。</p>
+        <div class="options">
+            <label><input type="radio" name="q36" value="同意" required> 同意</label>
+            <label><input type="radio" name="q36" value="中立"> 中立</label>
+            <label><input type="radio" name="q36" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q36" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+
+        </div>
+        <div class="error" id="error36">请选择一个选项！</div>
+
+    </div>
+
+    <div class="question" id="q37">
+        <p>37. 最晚到 2026 年，法定最低工资将提高至 15 欧元。 </p>
+        <p>目前（2025 年）的法定最低工资为每小时 12.82 欧元。税后最低工资/小时 大约为10欧元，中位数为13.67 欧元，平均数为16.34 欧元。一份土耳其卷饼 8欧，一瓶500ml可乐 2欧，一碗中餐牛肉面 12.8欧</p>
+        <div class="options">
+            <label><input type="radio" name="q37" value="同意" required> 同意</label>
+            <label><input type="radio" name="q37" value="中立"> 中立</label>
+            <label><input type="radio" name="q37" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q37" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+
+        </div>
+        <div class="error" id="error37">请选择一个选项！</div>
+
+    </div>
+
+    <div class="question" id="q38">
+        <p>38. 对于那些屡次拒绝工作机会的人，应取消其公民补助金。</p>
+        <p> (单身人士：每月 563 欧元，补助金约为3.52 欧元/小时。失业夫妇：每月 1012 欧元，两人平均每人补助金约为3.16 欧元/小时。)</p>
+        <div class="options">
+            <label><input type="radio" name="q38" value="同意" required> 同意</label>
+            <label><input type="radio" name="q38" value="中立"> 中立</label>
+            <label><input type="radio" name="q38" value="不同意"> 不同意</label>
+            <label><input type="radio" name="q38" value="不感兴趣/不了解"> 不感兴趣/不了解</label>
+
+        </div>
+        <div class="error" id="error38">请选择一个选项！</div>
+
+    </div>
+    <div class="navigation">
+        <button type="button" id="prevBtn" style="display: none;">上一题</button>
+        <button type="button" id="nextBtn">下一题</button>
+    </div>
+</form>
+
+
+<!-- 题目汇总 -->
+<div class="summary" id="summary">
+    <h2>请选择你认为十分关心的题目（可多选）：</h2>
+    <div id="summaryQuestions"></div>
+    <button type="button" id="submitSummary">提交</button>
+</div>
+
+<script>
+    // 定义每个问题的计分规则
+    const scoringRules = {
+        q1: {
+            同意: { SPD: 1, CDU_CSU: 1, GRÜNE: 1, FDP: 1 ,SSW:1},
+            中立: {},
+            不同意: { AFD: 1, FDP: 1, BSW: 1, DIE_LINKE: 1 }
+        },
+        q2: {
+            同意: { SPD: 1, CDU_CSU: 1, GRÜNE: 1, DIE_LINKE: 1 ,SSW:1},
+            中立: {},
+            不同意: { FDP: 1, AFD: 1, BSW: 1 }
+        },
+        q3: {
+            同意: { SPD: 1, GRÜNE: 1, DIE_LINKE: 1 ,SSW:1},
+            中立: {},
+            不同意: { CDU_CSU: 1, FDP: 1, AFD: 1, BSW: 1 }
+        },
+        q4: {
+            同意: { CDU_CSU: 1, FDP: 1, AFD: 1, BSW: 1 },
+            中立: {},
+            不同意: { SPD: 1, GRÜNE: 1, DIE_LINKE: 1 ,SSW:1}
+        },
+        q5: {
+            同意: { SPD: 1, CDU_CSU: 1, GRÜNE: 1, DIE_LINKE: 1,BSW: 1 ,SSW:1},
+            中立: {},
+            不同意: { FDP: 1, AFD: 1 }
+        },
+        q6: {
+            同意: { CDU_CSU: 1, AFD: 1 },
+            中立: { BSW: 1 },
+            不同意: { SPD: 1, GRÜNE: 1, FDP: 1, DIE_LINKE: 1 ,SSW:1}
+        },
+        q7: {
+            同意: { SPD: 1, CDU_CSU: 1, GRÜNE: 1, DIE_LINKE: 1 ,SSW:1},
+            中立: {},
+            不同意: { FDP: 1, AFD: 1, BSW: 1 }
+        },
+        q8: {
+            同意: { DIE_LINKE: 1, BSW: 1,SSW:1 },
+            中立: {},
+            不同意: { SPD: 1, CDU_CSU: 1, GRÜNE: 1, FDP: 1, AFD: 1 }
+        },
+        q9: {
+            同意: { SPD: 1, CDU_CSU: 1, AFD: 1 },
+            中立: { GRÜNE: 1, FDP: 1, BSW: 1 },
+            不同意: { DIE_LINKE: 1 ,SSW:1}
+        },
+        q10: {
+            同意: { SPD: 1, CDU_CSU: 1, GRÜNE: 1, FDP: 1,SSW:1 },
+            中立: { AFD: 1, DIE_LINKE: 1, BSW: 1 },
+            不同意: {}
+        },
+        q11: {
+            同意: { CDU_CSU: 1, FDP: 1, AFD: 1 },
+            中立: {},
+            不同意: { SPD: 1, GRÜNE: 1, DIE_LINKE: 1, BSW: 1,SSW:1 }
+        },
+        q12: {
+            同意: { SPD: 1, GRÜNE: 1, DIE_LINKE: 1, BSW: 1,SSW:1 },
+            中立: {},
+            不同意: { CDU_CSU: 1, FDP: 1, AFD: 1 }
+        },
+        q13: {
+            同意: { SPD: 1, GRÜNE: 1, FDP: 1, DIE_LINKE: 1, BSW: 1 },
+            中立: {},
+            不同意: { CDU_CSU: 1, AFD: 1,SSW:1 }
+        },
+        q14: {
+            同意: { SPD: 1, CDU_CSU: 1, GRÜNE: 1, FDP: 1 },
+            中立: { AFD: 1 ,SSW:1},
+            不同意: { DIE_LINKE: 1, BSW: 1 }
+        },
+        q15: {
+            同意: { SPD: 1, GRÜNE: 1, DIE_LINKE: 1, BSW: 1 ,SSW:1},
+            中立: {},
+            不同意: { CDU_CSU: 1, FDP: 1, AFD: 1 }
+        },
+        q16: {
+            同意: { AFD: 1 },
+            中立: { FDP: 1,},
+            不同意: { SPD: 1, CDU_CSU: 1, GRÜNE: 1, DIE_LINKE: 1, BSW: 1 ,SSW:1 }
+        },
+        q17: {
+            同意: { SPD: 1, GRÜNE: 1, DIE_LINKE: 1,SSW:1 },
+            中立: { BSW: 1 },
+            不同意: { CDU_CSU: 1, FDP: 1, AFD: 1 }
+        },
+        q18: {
+            同意: { SPD: 1, CDU_CSU: 1, GRÜNE: 1, FDP: 1, DIE_LINKE: 1, BSW: 1 ,SSW:1},
+            中立: {},
+            不同意: { AFD: 1 }
+        },
+        q19: {
+            同意: { SPD: 1, GRÜNE: 1, DIE_LINKE: 1 ,SSW:1},
+            中立: { BSW: 1 },
+            不同意: { CDU_CSU: 1, FDP: 1, AFD: 1 }
+        },
+        q20: {
+            同意: { SPD: 1, CDU_CSU: 1, GRÜNE: 1, AFD: 1, BSW: 1 },
+            中立: {},
+            不同意: { FDP: 1, DIE_LINKE: 1 ,SSW:1}
+        },
+        q21: {
+            同意: { CDU_CSU: 1, FDP: 1, AFD: 1 },
+            中立: { BSW: 1 },
+            不同意: { SPD: 1, GRÜNE: 1, DIE_LINKE: 1 ,SSW:1}
+        },
+        q22: {
+            同意: { SPD: 1, GRÜNE: 1, DIE_LINKE: 1 ,SSW:1},
+            中立: { FDP: 1 },
+            不同意: { CDU_CSU: 1, AFD: 1, BSW: 1 }
+        },
+        q23: {
+            同意: { AFD: 1 },
+            中立: {},
+            不同意: { SPD: 1, CDU_CSU: 1, GRÜNE: 1, FDP: 1, DIE_LINKE: 1, BSW: 1 ,SSW:1}
+        },
+        q24: {
+            同意: { DIE_LINKE: 1 },
+            中立: { SPD: 1, BSW: 1 ,SSW:1},
+            不同意: { CDU_CSU: 1, GRÜNE: 1, FDP: 1, AFD: 1 }
+        },
+        q25: {
+            同意: { CDU_CSU: 1, AFD: 1 },
+            中立: { FDP: 1 },
+            不同意: { SPD: 1, GRÜNE: 1, DIE_LINKE: 1, BSW: 1 ,SSW:1}
+        },
+        q26: {
+            同意: { AFD: 1 },
+            中立: {},
+            不同意: { SPD: 1, CDU_CSU: 1, GRÜNE: 1, FDP: 1, DIE_LINKE: 1, BSW: 1 ,SSW:1}
+        },
+        q27: {
+            同意: { SPD: 1, GRÜNE: 1, DIE_LINKE: 1, BSW: 1,SSW:1 },
+            中立: {},
+            不同意: { CDU_CSU: 1, FDP: 1, AFD: 1 }
+        },
+        q28: {
+            同意: { GRÜNE: 1 ,SSW:1},
+            中立: { DIE_LINKE: 1, BSW: 1 },
+            不同意: { SPD: 1, CDU_CSU: 1, FDP: 1, AFD: 1 }
+        },
+        q29: {
+            同意: { CDU_CSU: 1, FDP: 1 },
+            中立: { AFD: 1 },
+            不同意: { SPD: 1, GRÜNE: 1, DIE_LINKE: 1, BSW: 1 ,SSW:1}
+        },
+        q30: {
+            同意: { FDP: 1, AFD: 1 },
+            中立: { CDU_CSU: 1 },
+            不同意: { SPD: 1, GRÜNE: 1, DIE_LINKE: 1, BSW: 1 ,SSW:1}
+        },
+        q31: {
+            同意: { AFD: 1, DIE_LINKE: 1, BSW: 1 },
+            中立: { SPD: 1 },
+            不同意: { CDU_CSU: 1, GRÜNE: 1, FDP: 1,SSW:1 }
+        },
+        q32: {
+            同意: { CDU_CSU: 1, AFD: 1 },
+            中立: {},
+            不同意: { SPD: 1, GRÜNE: 1, FDP: 1, DIE_LINKE: 1, BSW: 1,SSW:1 }
+        },
+        q33: {
+            同意: { GRÜNE: 1, FDP: 1, AFD: 1, DIE_LINKE: 1, BSW: 1 },
+            中立: { SPD: 1, CDU_CSU: 1 },
+            不同意: {SSW:1}
+        },
+        q34: {
+            同意: { SPD: 1, GRÜNE: 1, FDP: 1, DIE_LINKE: 1, BSW: 1 ,SSW:1},
+            中立: {},
+            不同意: { CDU_CSU: 1, AFD: 1 }
+        },
+        q35: {
+            同意: { CDU_CSU: 1, BSW: 1 },
+            中立: { AFD: 1 },
+            不同意: { SPD: 1, GRÜNE: 1, FDP: 1, DIE_LINKE: 1 ,SSW:1}
+        },
+        q36: {
+            同意: { CDU_CSU: 1, FDP: 1, AFD: 1, BSW: 1 },
+            中立: {},
+            不同意: { SPD: 1, GRÜNE: 1, DIE_LINKE: 1,SSW:1 }
+        },
+        q37: {
+            同意: { SPD: 1, GRÜNE: 1,DIE_LINKE: 1, BSW: 1,SSW:1 },
+            中立: {CDU_CSU: 1,  AFD: 1,},
+            不同意: { FDP: 1  }
+        },
+        q38: {
+            同意: { SPD: 1, CDU_CSU: 1,FDP: 1,AFD: 1, BSW: 1},
+            中立: {},
+            不同意: { GRÜNE: 1,DIE_LINKE: 1,SSW:1 }
+        },
+
+    };
+    // 初始化党派得分
+    let scores = {
+        SPD: 0,
+        CDU_CSU: 0,
+        GRÜNE: 0,
+        DIE_LINKE: 0,
+        FDP: 0,
+        AFD: 0,
+        SSW: 0,
+        BSW: 0
+    };
+
+    // 获取所有问题页面
+    const questions = document.querySelectorAll('.question');
+    let currentQuestionIndex = 0;
+    // 显示当前问题
+    function showQuestion(index) {
+        questions.forEach((question, i) => {
+            if (i === index) {
+                question.classList.add('active');
+                // 为当前问题的单选框添加 change 事件监听器
+                const radios = question.querySelectorAll('input[type="radio"]');
+                radios.forEach(radio => {
+                    radio.addEventListener('change', function() {
+                        const currentQuestion = questions[currentQuestionIndex];
+                        const selectedOption = currentQuestion.querySelector('input[type="radio"]:checked');
+
+                        if (selectedOption) {
+                            // 隐藏错误提示
+                            currentQuestion.querySelector('.error').style.display = 'none';
+
+                            if (currentQuestionIndex < questions.length - 1) {
+                                currentQuestionIndex++;
+                                showQuestion(currentQuestionIndex);
+                            } else {
+                                // 提交问卷，显示题目汇总
+                                calculateScore();
+                                showSummary();
+                            }
+                        }
+                    });
+                });
+            } else {
+                question.classList.remove('active');
+            }
+        });
+
+        // 控制“上一题”按钮的显示
+        document.getElementById('prevBtn').style.display = index === 0 ? 'none' : 'inline-block';
+
+        // 控制“下一题”按钮的文本
+        document.getElementById('nextBtn').textContent = index === questions.length - 1 ? '提交' : '下一题';
+    }
+
+    // 显示下一个问题
+    document.getElementById('nextBtn').addEventListener('click', function() {
+        // 检查当前问题是否已选择
+        const currentQuestion = questions[currentQuestionIndex];
+        const selectedOption = currentQuestion.querySelector('input[type="radio"]:checked');
+
+        if (!selectedOption) {
+            // 如果没有选择，显示错误提示
+            currentQuestion.querySelector('.error').style.display = 'block';
+            return;
+        } else {
+            // 隐藏错误提示
+            currentQuestion.querySelector('.error').style.display = 'none';
+        }
+
+        if (currentQuestionIndex < questions.length - 1) {
+            currentQuestionIndex++;
+            showQuestion(currentQuestionIndex);
+        } else {
+            // 提交问卷，显示题目汇总
+            calculateScore();
+            showSummary();
+        }
+    });
+
+    // 显示上一个问题
+    document.getElementById('prevBtn').addEventListener('click', function () {
+        if (currentQuestionIndex > 0) {
+            currentQuestionIndex--;
+            showQuestion(currentQuestionIndex);
+        }
+    });
+
+    // 计算得分
+    function calculateScore() {
+        questions.forEach((question, index) => {
+            let selectedOption = question.querySelector('input[type="radio"]:checked');
+            if (selectedOption) {
+                let questionName = `q${index + 1}`;
+                let selectedValue = selectedOption.value;
+
+                if (selectedValue === "不感兴趣/不了解") {
+                    // 如果选择“不感兴趣/不了解”，所有党派得分为 0
+                    return;
+                }
+
+                if (scoringRules[questionName] && scoringRules[questionName][selectedValue]) {
+                    let rule = scoringRules[questionName][selectedValue];
+                    for (let party in rule) {
+                        scores[party] += rule[party];
+                    }
+                }
+            }
+        });
+    }
+    // 显示题目汇总
+    function showSummary() {
+        document.getElementById('surveyForm').style.display = 'none';
+        const summaryQuestions = document.getElementById('summaryQuestions');
+        summaryQuestions.innerHTML = '';
+
+        questions.forEach((question, index) => {
+            const questionText = question.querySelector('p').textContent;
+            summaryQuestions.innerHTML += `
+                    <label>
+                        <input type="checkbox" name="summary" value="q${index + 1}"> ${questionText}
+                    </label>
+                `;
+        });
+
+        document.getElementById('summary').style.display = 'block';
+    }
+
+    // 提交题目汇总
+    document.getElementById('submitSummary').addEventListener('click', function () {
+        const selectedQuestions = document.querySelectorAll('input[name="summary"]:checked');
+        selectedQuestions.forEach((question) => {
+            const questionName = question.value;
+            const selectedOption = document.querySelector(`.${questionName} input[type="radio"]:checked`);
+
+            if (selectedOption && selectedOption.value !== "不感兴趣/不了解") {
+                const selectedValue = selectedOption.value;
+                const rule = scoringRules[questionName][selectedValue];
+                for (let party in rule) {
+                    scores[party] += rule[party]; // 翻倍得分
+                }
+            }
+        });
+
+        // 跳转到结果页面
+        localStorage.setItem('scores', JSON.stringify(scores));
+        window.location.href = 'result.html';
+    });
+
+    // 开始答题按钮点击事件
+    document.getElementById('startBtn').addEventListener('click', function () {
+        document.getElementById('intro').style.display = 'none';
+        document.getElementById('surveyForm').style.display = 'block';
+        showQuestion(currentQuestionIndex);
+    });
+</script>
+
+</body>
+
+</html>

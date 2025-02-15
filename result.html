@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device - width, initial - scale = 1.0">
+  <title>问卷结果</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans - serif;
+      margin: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .chart-container {
+               width: 80%;
+               margin: 0 auto;
+             }
+
+    .button-container {
+                text-align: center;
+                margin-top: 40px;
+              }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007BFF;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin: 0 10px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+
+<body>
+<h1>问卷结果</h1>
+<div class="chart - container">
+  <canvas id="scoreChart"></canvas>
+</div>
+<div class="button - container">
+  <button id="showHighestParty">查看最高得分党派</button>
+</div>
+<script>
+  // 从localStorage中获取得分
+  const scores = JSON.parse(localStorage.getItem('scores'));
+
+  // 找到得分最高和最低的党派
+  let highestParty = { name: '', score: -Infinity };
+  let lowestParty = { name: '', score: Infinity };
+
+  for (const [party, score] of Object.entries(scores)) {
+    if (score > highestParty.score) {
+      highestParty.name = party;
+      highestParty.score = score;
+    }
+    if (score < lowestParty.score) {
+      lowestParty.name = party;
+      lowestParty.score = score;
+    }
+  }
+
+  // 渲染图表
+  const ctx = document.getElementById('scoreChart').getContext('2d');
+  const scoreChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['SPD', 'CDU/CSU', 'GRÜNE', 'Die Linke', 'FDP', 'AFD', 'SSW', 'BSW'],
+      datasets: [{
+        label: '得分',
+        data: [
+          scores.SPD,
+          scores.CDU_CSU,
+          scores.GRÜNE,
+          scores.DIE_LINKE,
+          scores.FDP,
+          scores.AFD,
+          scores.SSW,
+          scores.BSW
+        ],
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(199, 199, 199, 0.2)',
+          'rgba(83, 102, 255, 0.2)'
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)',
+          'rgba(199, 199, 199, 1)',
+          'rgba(83, 102, 255, 1)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+
+  document.getElementById('showHighestParty').addEventListener('click', function () {
+    localStorage.setItem('highestParty', highestParty.name);
+    localStorage.setItem('lowestParty', lowestParty.name);
+    window.location.href = 'highestParty.html';
+  });
+</script>
+</body>
+
+</html>
