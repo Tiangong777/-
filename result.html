@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>问卷结果</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .chart-container {
+      width: 80%;
+      margin: 0 auto;
+      /* 设置最大高度，避免图表过高影响下面内容显示 */
+      max-height: 400px;
+    }
+
+    .party-info {
+      margin-top: 20px;
+      padding: 20px;
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      /* 设置外边距底部，增加间隔 */
+      margin-bottom: 20px;
+    }
+
+    .party-info h2 {
+      margin-top: 0;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>问卷结果</h1>
+<div class="chart-container">
+  <canvas id="scoreChart"></canvas>
+</div>
+
+<!-- 得分最高的党派介绍 -->
+<div class="party-info" id="highestPartyInfo">
+  <h2>得分最高的党派：<span id="highestPartyName"></span></h2>
+  <p id="highestPartyDescription"></p>
+</div>
+
+<!-- 得分最低的党派介绍 -->
+<div class="party-info" id="lowestPartyInfo">
+  <h2>得分最低的党派：<span id="lowestPartyName"></span></h2>
+  <p id="lowestPartyDescription"></p>
+</div>
+
+<script>
+  // 从 localStorage 中获取得分
+  const scores = JSON.parse(localStorage.getItem('scores'));
+
+  // 党派信息
+  const partyInfo = {
+    SPD: {
+      name: "德国社会民主党（SPD） 代表人物：奥拉夫・朔尔茨 现任德国总理",
+      description: "德国历史悠久的政党，主张社会公平、福利国家建设和经济干预，在劳工权益、社会政策等方面有较大影响力。派别：左翼"
+    },
+    CDU_CSU: {
+      name: "基督教民主联盟 - 基督教社会联盟（CDU - CSU） 代表人物：安格拉・默克尔",
+      description: "德国传统大党，CDU 主要在联邦层面，CSU 主要在巴伐利亚州。强调基督教价值观、市场经济和稳定的社会秩序。派别：右翼"
+    },
+    GRÜNE: {
+      name: "联盟 90 / 绿党（GRÜNE）代表人物：罗伯特・哈贝克 现任德国副总理兼经济和气候保护部长",
+      description: "专注于环境保护、可持续发展、和平主义和社会正义议题，推动绿色经济和生态政策。派别：左翼"
+    },
+    DIE_LINKE: {
+      name: "德国左翼党（DIE LINKE）代表人物：罗莎・卢森堡 杰出的马克思主义理论家",
+      description: "主张激进的社会变革、财富再分配、提高社会福利和反对新自由主义经济政策。派别：左翼"
+    },
+    FDP: {
+      name: "自由民主党（FDP）代表人物：克里斯蒂安・林德纳 现任德国财政部长",
+      description: "强调市场经济、个人自由和较少的政府干预，支持自由竞争和经济自由化。派别：右翼"
+    },
+    AFD: {
+      name: "德国选择党（AFD）代表人物：爱丽丝・魏德尔 现任选择党党团主席",
+      description: "极右翼政党，具有强烈的民族主义、排外主义和反移民立场，对德国现行政治和社会政策多有批判。派别：极右翼"
+    },
+    SSW: {
+      name: "南石勒苏益格选民协会（SSW）",
+      description: "主要代表德国境内丹麦少数族裔利益，关注区域自治、文化保护和少数民族权益。派别：难以简单用左右翼划分"
+    },
+    BSW: {
+      name: "巴伐利亚州党（BSW）",
+      description: "主要活跃于巴伐利亚州，强调巴伐利亚地区的传统、文化和利益，有一定地方保护主义色彩。派别：难以简单用左右翼划分"
+    }
+  };
+
+  // 找到得分最高和最低的党派
+  let highestParty = { name: '', score: -Infinity };
+  let lowestParty = { name: '', score: Infinity };
+
+  for (const [party, score] of Object.entries(scores)) {
+    if (score > highestParty.score) {
+      highestParty.name = party;
+      highestParty.score = score;
+    }
+    if (score < lowestParty.score) {
+      lowestParty.name = party;
+      lowestParty.score = score;
+    }
+  }
+
+  // 渲染图表
+  const ctx = document.getElementById('scoreChart').getContext('2d');
+  const scoreChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['SPD', 'CDU/CSU', 'GRÜNE', 'Die Linke', 'FDP', 'AFD', 'SSW', 'BSW'],
+      datasets: [{
+        label: '得分',
+        data: [
+          scores.SPD,
+          scores.CDU_CSU,
+          scores.GRÜNE,
+          scores.DIE_LINKE,
+          scores.FDP,
+          scores.AFD,
+          scores.SSW,
+          scores.BSW
+        ],
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(199, 199, 199, 0.2)',
+          'rgba(83, 102, 255, 0.2)'
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)',
+          'rgba(199, 199, 199, 1)',
+          'rgba(83, 102, 255, 1)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+
+  // 显示得分最高和最低的党派信息
+  document.getElementById('highestPartyName').textContent = partyInfo[highestParty.name].name;
+  document.getElementById('highestPartyDescription').textContent = partyInfo[highestParty.name].description;
+
+  document.getElementById('lowestPartyName').textContent = partyInfo[lowestParty.name].name;
+  document.getElementById('lowestPartyDescription').textContent = partyInfo[lowestParty.name].description;
+</script>
+
+</body>
+
+</html>
