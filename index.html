@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,48 +9,145 @@
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
+            background-color: #f4f4f4;
         }
-        h1, h2 {
+
+        h1,
+        h2 {
             text-align: center;
+            color: #333;
         }
+
+        #intro {
+            text-align: center;
+            padding: 50px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #startBtn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #startBtn:hover {
+            background-color: #0056b3;
+        }
+
         .question {
             margin-bottom: 20px;
-            display: none; /* 默认隐藏所有问题 */
+            display: none;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.5s ease;
         }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         .question.active {
-            display: block; /* 显示当前问题 */
+            display: block;
         }
+
+        .question p {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
         .options {
             margin-left: 20px;
         }
+
+        .options label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .options label:hover {
+            color: #007BFF;
+        }
+
         .navigation {
             margin-top: 20px;
+            text-align: center;
         }
+
+        .navigation button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin: 0 5px;
+        }
+
+        .navigation button:hover {
+            background-color: #0056b3;
+        }
+
         .error {
             color: red;
             margin-top: 10px;
             display: none;
         }
+
         .summary {
             margin-top: 40px;
             padding: 20px;
-            background-color: #f9f9f9;
+            background-color: #fff;
             border: 1px solid #ddd;
-            display: none; /* 默认隐藏题目汇总 */
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: none;
         }
+
+        .summary h2 {
+            margin-top: 0;
+        }
+
         .summary label {
             display: block;
             margin: 10px 0;
+            font-size: 16px;
         }
     </style>
 </head>
 <body>
 
-<h1>德国大选38个关键问题</h1>
-<h2>这是即将到来的德国大选中38个关键问题，涵盖了经济、社会、公民权利、环境、外交等领域。想不想知道自己的政治倾向？</h2>
-<p>题目说明只是一个粗略简单的介绍，并不完整和严谨。</p>
-
-<form id="surveyForm">
+<!-- 初始页面，显示标题和介绍 -->
+<div id="intro">
+    <h1>德国大选38个关键问题</h1>
+    <h2>这是即将到来的德国大选中38个关键问题，涵盖了经济、社会、公民权利、环境、外交等领域。想不想知道自己的政治倾向？</h2>
+    <p>题目说明只是一个粗略简单的介绍，并不完整和严谨。注意，中立选项代表对此问题有所了解但是态度中立</p>
+    <button id="startBtn">开始答题</button>
+</div>
+<form id="surveyForm" style="display: none;">
     <!-- 问题1 -->
     <div class="question active" id="q1">
         <p>1. 德国应继续在军事上支持乌克兰 </p>
@@ -61,7 +159,6 @@
         </div>
         <div class="error" id="error1">请选择一个选项！</div>
     </div>
-
     <!-- 问题2 -->
     <div class="question" id="q2">
         <p>2. 可再生能源的发展应继续得到国家的财政支持。</p>
@@ -552,160 +649,160 @@
         q5: {
             同意: { SPD: 1, CDU_CSU: 1, GRÜNE: 1, DIE_LINKE: 1,BSW: 1 ,SSW:1},
             中立: {},
-            不同意: { FDP: 1, AfD: 1 }
+            不同意: { FDP: 1, AFD: 1 }
         },
         q6: {
-            同意: { CDU_CSU: 1, AfD: 1 },
+            同意: { CDU_CSU: 1, AFD: 1 },
             中立: { BSW: 1 },
             不同意: { SPD: 1, GRÜNE: 1, FDP: 1, DIE_LINKE: 1 ,SSW:1}
         },
         q7: {
             同意: { SPD: 1, CDU_CSU: 1, GRÜNE: 1, DIE_LINKE: 1 ,SSW:1},
             中立: {},
-            不同意: { FDP: 1, AfD: 1, BSW: 1 }
+            不同意: { FDP: 1, AFD: 1, BSW: 1 }
         },
         q8: {
             同意: { DIE_LINKE: 1, BSW: 1,SSW:1 },
             中立: {},
-            不同意: { SPD: 1, CDU_CSU: 1, GRÜNE: 1, FDP: 1, AfD: 1 }
+            不同意: { SPD: 1, CDU_CSU: 1, GRÜNE: 1, FDP: 1, AFD: 1 }
         },
         q9: {
-            同意: { SPD: 1, CDU_CSU: 1, AfD: 1 },
+            同意: { SPD: 1, CDU_CSU: 1, AFD: 1 },
             中立: { GRÜNE: 1, FDP: 1, BSW: 1 },
             不同意: { DIE_LINKE: 1 ,SSW:1}
         },
         q10: {
             同意: { SPD: 1, CDU_CSU: 1, GRÜNE: 1, FDP: 1,SSW:1 },
-            中立: { AfD: 1, DIE_LINKE: 1, BSW: 1 },
+            中立: { AFD: 1, DIE_LINKE: 1, BSW: 1 },
             不同意: {}
         },
         q11: {
-            同意: { CDU_CSU: 1, FDP: 1, AfD: 1 },
+            同意: { CDU_CSU: 1, FDP: 1, AFD: 1 },
             中立: {},
             不同意: { SPD: 1, GRÜNE: 1, DIE_LINKE: 1, BSW: 1,SSW:1 }
         },
         q12: {
             同意: { SPD: 1, GRÜNE: 1, DIE_LINKE: 1, BSW: 1,SSW:1 },
             中立: {},
-            不同意: { CDU_CSU: 1, FDP: 1, AfD: 1 }
+            不同意: { CDU_CSU: 1, FDP: 1, AFD: 1 }
         },
         q13: {
             同意: { SPD: 1, GRÜNE: 1, FDP: 1, DIE_LINKE: 1, BSW: 1 },
             中立: {},
-            不同意: { CDU_CSU: 1, AfD: 1,SSW:1 }
+            不同意: { CDU_CSU: 1, AFD: 1,SSW:1 }
         },
         q14: {
             同意: { SPD: 1, CDU_CSU: 1, GRÜNE: 1, FDP: 1 },
-            中立: { AfD: 1 ,SSW:1},
+            中立: { AFD: 1 ,SSW:1},
             不同意: { DIE_LINKE: 1, BSW: 1 }
         },
         q15: {
             同意: { SPD: 1, GRÜNE: 1, DIE_LINKE: 1, BSW: 1 ,SSW:1},
             中立: {},
-            不同意: { CDU_CSU: 1, FDP: 1, AfD: 1 }
+            不同意: { CDU_CSU: 1, FDP: 1, AFD: 1 }
         },
         q16: {
-            同意: { AfD: 1 },
+            同意: { AFD: 1 },
             中立: { FDP: 1,},
             不同意: { SPD: 1, CDU_CSU: 1, GRÜNE: 1, DIE_LINKE: 1, BSW: 1 ,SSW:1 }
         },
         q17: {
             同意: { SPD: 1, GRÜNE: 1, DIE_LINKE: 1,SSW:1 },
             中立: { BSW: 1 },
-            不同意: { CDU_CSU: 1, FDP: 1, AfD: 1 }
+            不同意: { CDU_CSU: 1, FDP: 1, AFD: 1 }
         },
         q18: {
             同意: { SPD: 1, CDU_CSU: 1, GRÜNE: 1, FDP: 1, DIE_LINKE: 1, BSW: 1 ,SSW:1},
             中立: {},
-            不同意: { AfD: 1 }
+            不同意: { AFD: 1 }
         },
         q19: {
             同意: { SPD: 1, GRÜNE: 1, DIE_LINKE: 1 ,SSW:1},
             中立: { BSW: 1 },
-            不同意: { CDU_CSU: 1, FDP: 1, AfD: 1 }
+            不同意: { CDU_CSU: 1, FDP: 1, AFD: 1 }
         },
         q20: {
-            同意: { SPD: 1, CDU_CSU: 1, GRÜNE: 1, AfD: 1, BSW: 1 },
+            同意: { SPD: 1, CDU_CSU: 1, GRÜNE: 1, AFD: 1, BSW: 1 },
             中立: {},
             不同意: { FDP: 1, DIE_LINKE: 1 ,SSW:1}
         },
         q21: {
-            同意: { CDU_CSU: 1, FDP: 1, AfD: 1 },
+            同意: { CDU_CSU: 1, FDP: 1, AFD: 1 },
             中立: { BSW: 1 },
             不同意: { SPD: 1, GRÜNE: 1, DIE_LINKE: 1 ,SSW:1}
         },
         q22: {
             同意: { SPD: 1, GRÜNE: 1, DIE_LINKE: 1 ,SSW:1},
             中立: { FDP: 1 },
-            不同意: { CDU_CSU: 1, AfD: 1, BSW: 1 }
+            不同意: { CDU_CSU: 1, AFD: 1, BSW: 1 }
         },
         q23: {
-            同意: { AfD: 1 },
+            同意: { AFD: 1 },
             中立: {},
             不同意: { SPD: 1, CDU_CSU: 1, GRÜNE: 1, FDP: 1, DIE_LINKE: 1, BSW: 1 ,SSW:1}
         },
         q24: {
             同意: { DIE_LINKE: 1 },
             中立: { SPD: 1, BSW: 1 ,SSW:1},
-            不同意: { CDU_CSU: 1, GRÜNE: 1, FDP: 1, AfD: 1 }
+            不同意: { CDU_CSU: 1, GRÜNE: 1, FDP: 1, AFD: 1 }
         },
         q25: {
-            同意: { CDU_CSU: 1, AfD: 1 },
+            同意: { CDU_CSU: 1, AFD: 1 },
             中立: { FDP: 1 },
             不同意: { SPD: 1, GRÜNE: 1, DIE_LINKE: 1, BSW: 1 ,SSW:1}
         },
         q26: {
-            同意: { AfD: 1 },
+            同意: { AFD: 1 },
             中立: {},
             不同意: { SPD: 1, CDU_CSU: 1, GRÜNE: 1, FDP: 1, DIE_LINKE: 1, BSW: 1 ,SSW:1}
         },
         q27: {
             同意: { SPD: 1, GRÜNE: 1, DIE_LINKE: 1, BSW: 1,SSW:1 },
             中立: {},
-            不同意: { CDU_CSU: 1, FDP: 1, AfD: 1 }
+            不同意: { CDU_CSU: 1, FDP: 1, AFD: 1 }
         },
         q28: {
             同意: { GRÜNE: 1 ,SSW:1},
             中立: { DIE_LINKE: 1, BSW: 1 },
-            不同意: { SPD: 1, CDU_CSU: 1, FDP: 1, AfD: 1 }
+            不同意: { SPD: 1, CDU_CSU: 1, FDP: 1, AFD: 1 }
         },
         q29: {
             同意: { CDU_CSU: 1, FDP: 1 },
-            中立: { AfD: 1 },
+            中立: { AFD: 1 },
             不同意: { SPD: 1, GRÜNE: 1, DIE_LINKE: 1, BSW: 1 ,SSW:1}
         },
         q30: {
-            同意: { FDP: 1, AfD: 1 },
+            同意: { FDP: 1, AFD: 1 },
             中立: { CDU_CSU: 1 },
             不同意: { SPD: 1, GRÜNE: 1, DIE_LINKE: 1, BSW: 1 ,SSW:1}
         },
         q31: {
-            同意: { AfD: 1, DIE_LINKE: 1, BSW: 1 },
+            同意: { AFD: 1, DIE_LINKE: 1, BSW: 1 },
             中立: { SPD: 1 },
             不同意: { CDU_CSU: 1, GRÜNE: 1, FDP: 1,SSW:1 }
         },
         q32: {
-            同意: { CDU_CSU: 1, AfD: 1 },
+            同意: { CDU_CSU: 1, AFD: 1 },
             中立: {},
             不同意: { SPD: 1, GRÜNE: 1, FDP: 1, DIE_LINKE: 1, BSW: 1,SSW:1 }
         },
         q33: {
-            同意: { GRÜNE: 1, FDP: 1, AfD: 1, DIE_LINKE: 1, BSW: 1 },
+            同意: { GRÜNE: 1, FDP: 1, AFD: 1, DIE_LINKE: 1, BSW: 1 },
             中立: { SPD: 1, CDU_CSU: 1 },
             不同意: {SSW:1}
         },
         q34: {
             同意: { SPD: 1, GRÜNE: 1, FDP: 1, DIE_LINKE: 1, BSW: 1 ,SSW:1},
             中立: {},
-            不同意: { CDU_CSU: 1, AfD: 1 }
+            不同意: { CDU_CSU: 1, AFD: 1 }
         },
         q35: {
             同意: { CDU_CSU: 1, BSW: 1 },
-            中立: { AfD: 1 },
+            中立: { AFD: 1 },
             不同意: { SPD: 1, GRÜNE: 1, FDP: 1, DIE_LINKE: 1 ,SSW:1}
         },
         q36: {
-            同意: { CDU_CSU: 1, FDP: 1, AfD: 1, BSW: 1 },
+            同意: { CDU_CSU: 1, FDP: 1, AFD: 1, BSW: 1 },
             中立: {},
             不同意: { SPD: 1, GRÜNE: 1, DIE_LINKE: 1,SSW:1 }
         },
@@ -721,7 +818,6 @@
         },
 
     };
-
     // 初始化党派得分
     let scores = {
         SPD: 0,
@@ -737,12 +833,33 @@
     // 获取所有问题页面
     const questions = document.querySelectorAll('.question');
     let currentQuestionIndex = 0;
-
     // 显示当前问题
     function showQuestion(index) {
         questions.forEach((question, i) => {
             if (i === index) {
                 question.classList.add('active');
+                // 为当前问题的单选框添加 change 事件监听器
+                const radios = question.querySelectorAll('input[type="radio"]');
+                radios.forEach(radio => {
+                    radio.addEventListener('change', function() {
+                        const currentQuestion = questions[currentQuestionIndex];
+                        const selectedOption = currentQuestion.querySelector('input[type="radio"]:checked');
+
+                        if (selectedOption) {
+                            // 隐藏错误提示
+                            currentQuestion.querySelector('.error').style.display = 'none';
+
+                            if (currentQuestionIndex < questions.length - 1) {
+                                currentQuestionIndex++;
+                                showQuestion(currentQuestionIndex);
+                            } else {
+                                // 提交问卷，显示题目汇总
+                                calculateScore();
+                                showSummary();
+                            }
+                        }
+                    });
+                });
             } else {
                 question.classList.remove('active');
             }
@@ -781,7 +898,7 @@
     });
 
     // 显示上一个问题
-    document.getElementById('prevBtn').addEventListener('click', function() {
+    document.getElementById('prevBtn').addEventListener('click', function () {
         if (currentQuestionIndex > 0) {
             currentQuestionIndex--;
             showQuestion(currentQuestionIndex);
@@ -810,26 +927,26 @@
             }
         });
     }
-
     // 显示题目汇总
     function showSummary() {
+        document.getElementById('surveyForm').style.display = 'none';
         const summaryQuestions = document.getElementById('summaryQuestions');
         summaryQuestions.innerHTML = '';
 
         questions.forEach((question, index) => {
             const questionText = question.querySelector('p').textContent;
             summaryQuestions.innerHTML += `
-                <label>
-                    <input type="checkbox" name="summary" value="q${index + 1}"> ${questionText}
-                </label>
-            `;
+                    <label>
+                        <input type="checkbox" name="summary" value="q${index + 1}"> ${questionText}
+                    </label>
+                `;
         });
 
         document.getElementById('summary').style.display = 'block';
     }
 
     // 提交题目汇总
-    document.getElementById('submitSummary').addEventListener('click', function() {
+    document.getElementById('submitSummary').addEventListener('click', function () {
         const selectedQuestions = document.querySelectorAll('input[name="summary"]:checked');
         selectedQuestions.forEach((question) => {
             const questionName = question.value;
@@ -849,9 +966,14 @@
         window.location.href = 'result.html';
     });
 
-    // 初始化显示第一个问题
-    showQuestion(currentQuestionIndex);
+    // 开始答题按钮点击事件
+    document.getElementById('startBtn').addEventListener('click', function () {
+        document.getElementById('intro').style.display = 'none';
+        document.getElementById('surveyForm').style.display = 'block';
+        showQuestion(currentQuestionIndex);
+    });
 </script>
 
 </body>
+
 </html>
