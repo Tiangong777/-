@@ -31,6 +31,12 @@
     document.addEventListener('DOMContentLoaded', () => {
       // 从 localStorage 中获取得分
       const scores = JSON.parse(localStorage.getItem('scores'));
+      console.log('获取到的 scores 数据:', scores);
+
+      if (!scores) {
+        console.error('未获取到 scores 数据');
+        return;
+      }
 
       // 找到得分最高和最低的党派
       let highestParty = { name: '', score: -Infinity };
@@ -47,8 +53,55 @@
         }
       }
 
-      // 对党派分数进行排序
-      const sortedScores = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+      // 渲染图表
+      const ctx = document.getElementById('scoreChart').getContext('2d');
+      const scoreChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['SPD', 'CDU/CSU', 'GRÜNE', 'Die Linke', 'FDP', 'AFD', 'SSW', 'BSW'],
+          datasets: [{
+            label: '得分',
+            data: [
+              scores.SPD,
+              scores.CDU_CSU,
+              scores.GRÜNE,
+              scores.DIE_LINKE,
+              scores.FDP,
+              scores.AFD,
+              scores.SSW,
+              scores.BSW
+            ],
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(153, 102, 255, 0.2)',
+              'rgba(255, 159, 64, 0.2)',
+              'rgba(199, 199, 199, 0.2)',
+              'rgba(83, 102, 255, 0.2)'
+            ],
+            borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)',
+              'rgba(199, 199, 199, 1)',
+              'rgba(83, 102, 255, 1)'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
 
       // 获取 IP 地址
       fetch('https://api.ipify.org?format=json')
@@ -69,7 +122,7 @@
                       ip: ip,
                       highestParty: highestParty.name,
                       lowestParty: lowestParty.name,
-                      sortedScores: sortedScores
+                      scores: scores
                     });
                     console.log("数据已成功保存到 Firebase 数据库");
                     window.location.href = 'highestParty.html';
