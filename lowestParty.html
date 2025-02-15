@@ -3,11 +3,11 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device - width, initial - scale = 1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>最低得分党派</title>
   <style>
     body {
-      font-family: Arial, sans - serif;
+      font-family: Arial, sans-serif;
       margin: 20px;
     }
 
@@ -16,31 +16,54 @@
     }
 
     .party-info {
-               margin-top: 40px;
-               padding: 20px;
-               background-color: #f9f9f9;
-               border: 1px solid #ddd;
-               border-radius: 8px;
-               box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-             }
+      margin-top: 40px;
+      padding: 20px;
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
 
     .party-info h2 {
-               margin-top: 0;
-               color: #333;
-             }
+      margin-top: 0;
+      color: #333;
+    }
 
     .party-info p {
-               color: #555;
-               line-height: 1.6;
-             }
+      color: #555;
+      line-height: 1.6;
+    }
+
+    .button-container {
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007BFF;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
   </style>
 </head>
 
 <body>
 <h1>最低得分党派</h1>
-<div class="party - info" id="lowestPartyInfo">
+<div class="party-info" id="lowestPartyInfo">
   <h2 id="lowestPartyName"></h2>
   <p id="lowestPartyDescription"></p>
+</div>
+<div class="button-container">
+  <button id="showStatistics">查看所有人结果统计</button>
 </div>
 <script>
   // 党派信息
@@ -82,6 +105,10 @@
   const lowestParty = localStorage.getItem('lowestParty');
   document.getElementById('lowestPartyName').textContent = partyInfo[lowestParty].name;
   document.getElementById('lowestPartyDescription').textContent = partyInfo[lowestParty].description;
+
+  document.getElementById('showStatistics').addEventListener('click', function () {
+    window.location.href = 'statistics.html';
+  });
 </script>
 </body>
 

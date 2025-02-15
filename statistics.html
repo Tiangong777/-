@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>统计结果</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module">
+        // 导入 Firebase SDK 相关模块
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAYOS32dLMNIDvBTUNi7IChMROUDDEt0mE",
+            authDomain: "deguodaxuan.firebaseapp.com",
+            databaseURL: "https://deguodaxuan-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "deguodaxuan",
+            storageBucket: "deguodaxuan.firebasestorage.app",
+            messagingSenderId: "339307261350",
+            appId: "1:339307261350:web:8e18225088bf2c771eb367",
+            measurementId: "G-MKRT819CR4"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        // 获取 Firebase 实时数据库实例
+        const database = getDatabase(app);
+        // 获取 responses 节点的引用
+        const responsesRef = ref(database, 'responses');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // 监听 responses 节点的数据变化
+            onValue(responsesRef, (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    const highestPartyCount = {};
+                    const lowestPartyCount = {};
+
+                    // 遍历所有记录，统计最高得分和最低得分党派的出现次数
+                    Object.values(data).forEach(response => {
+                        const highestParty = response.highestParty;
+                        const lowestParty = response.lowestParty;
+
+                        if (highestParty in highestPartyCount) {
+                            highestPartyCount[highestParty]++;
+                        } else {
+                            highestPartyCount[highestParty] = 1;
+                        }
+
+                        if (lowestParty in lowestPartyCount) {
+                            lowestPartyCount[lowestParty]++;
+                        } else {
+                            lowestPartyCount[lowestParty] = 1;
+                        }
+                    });
+
+                    // 处理最高得分党派统计数据
+                    const highestPartyLabels = Object.keys(highestPartyCount);
+                    const highestPartyData = Object.values(highestPartyCount);
+                    const highestTotal = highestPartyData.reduce((sum, value) => sum + value, 0);
+                    const highestPartyPercentages = highestPartyData.map(value => ((value / highestTotal) * 100).toFixed(2));
+
+                    // 绘制最高得分党派统计饼状图
+                    const highestPartyCtx = document.getElementById('highestPartyChart').getContext('2d');
+                    new Chart(highestPartyCtx, {
+                        type: 'pie',
+                        data: {
+                            labels: highestPartyLabels,
+                            datasets: [{
+                                label: '最多人最高分的党派统计',
+                                data: highestPartyData,
+                                backgroundColor: [
+                                    'rgba(255, 99, 132, 0.7)',
+                                    'rgba(54, 162, 235, 0.7)',
+                                    'rgba(255, 205, 86, 0.7)',
+                                    'rgba(75, 192, 192, 0.7)',
+                                    'rgba(153, 102, 255, 0.7)',
+                                    'rgba(255, 159, 64, 0.7)',
+                                    'rgba(128, 128, 128, 0.7)',
+                                    'rgba(255, 20, 147, 0.7)'
+                                ],
+                                borderColor: [
+                                    'rgba(255, 99, 132, 1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(255, 205, 86, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(153, 102, 255, 1)',
+                                    'rgba(255, 159, 64, 1)',
+                                    'rgba(128, 128, 128, 1)',
+                                    'rgba(255, 20, 147, 1)'
+                                ],
+                                borderWidth: 1,
+                                datalabels: {
+                                    formatter: (value, context) => {
+                                        return `${highestPartyPercentages[context.dataIndex]}%`;
+                                    },
+                                    color: 'white'
+                                }
+                            }]
+                        },
+                        options: {
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom'
+                                },
+                                datalabels: {
+                                    display: true
+                                },
+                                title: {
+                                    display: true,
+                                    text: '最符合的党派分布'
+                                }
+                            }
+                        }
+                    });
+
+                    // 处理最低得分党派统计数据
+                    const lowestPartyLabels = Object.keys(lowestPartyCount);
+                    const lowestPartyData = Object.values(lowestPartyCount);
+                    const lowestTotal = lowestPartyData.reduce((sum, value) => sum + value, 0);
+                    const lowestPartyPercentages = lowestPartyData.map(value => ((value / lowestTotal) * 100).toFixed(2));
+
+                    // 绘制最低得分党派统计饼状图
+                    const lowestPartyCtx = document.getElementById('lowestPartyChart').getContext('2d');
+                    new Chart(lowestPartyCtx, {
+                        type: 'pie',
+                        data: {
+                            labels: lowestPartyLabels,
+                            datasets: [{
+                                label: '最多人最低分的党派统计',
+                                data: lowestPartyData,
+                                backgroundColor: [
+                                    'rgba(255, 99, 132, 0.7)',
+                                    'rgba(54, 162, 235, 0.7)',
+                                    'rgba(255, 205, 86, 0.7)',
+                                    'rgba(75, 192, 192, 0.7)',
+                                    'rgba(153, 102, 255, 0.7)',
+                                    'rgba(255, 159, 64, 0.7)',
+                                    'rgba(128, 128, 128, 0.7)',
+                                    'rgba(255, 20, 147, 0.7)'
+                                ],
+                                borderColor: [
+                                    'rgba(255, 99, 132, 1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(255, 205, 86, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(153, 102, 255, 1)',
+                                    'rgba(255, 159, 64, 1)',
+                                    'rgba(128, 128, 128, 1)',
+                                    'rgba(255, 20, 147, 1)'
+                                ],
+                                borderWidth: 1,
+                                datalabels: {
+                                    formatter: (value, context) => {
+                                        return `${lowestPartyPercentages[context.dataIndex]}%`;
+                                    },
+                                    color: 'white'
+                                }
+                            }]
+                        },
+                        options: {
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom'
+                                },
+                                datalabels: {
+                                    display: true
+                                },
+                                title: {
+                                    display: true,
+                                    text: '最不符合的党派分布'
+                                }
+                            }
+                        }
+                    });
+                }
+            }, (error) => {
+                console.error('读取 Firebase 数据库数据时出错: ', error);
+            });
+        });
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .chart-container {
+            width: 50%;
+            margin: 0 auto;
+            max-width: 400px;
+        }
+    </style>
+</head>
+
+<body>
+<h1>所有人结果统计</h1>
+<div class="chart-container">
+    <canvas id="highestPartyChart"></canvas>
+</div>
+<div class="chart-container">
+    <canvas id="lowestPartyChart"></canvas>
+</div>
+<!-- 引入 Chart.js 的数据标签插件 -->
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+</body>
+
+</html>

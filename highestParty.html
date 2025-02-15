@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="zh - CN">
+<html lang="zh-CN">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device - width, initial - scale = 1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>最高得分党派</title>
     <style>
         body {
-            font-family: Arial, sans - serif;
+            font-family: Arial, sans-serif;
             margin: 20px;
         }
 
@@ -16,28 +16,28 @@
         }
 
         .party-info {
-                     margin-top: 40px;
-                     padding: 20px;
-                     background-color: #f9f9f9;
-                     border: 1px solid #ddd;
-                     border - radius: 8px;
-                     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                 }
+            margin-top: 40px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
 
         .party-info h2 {
-                     margin-top: 0;
-                     color: #333;
-                 }
+            margin-top: 0;
+            color: #333;
+        }
 
         .party-info p {
-                     color: #555;
-                     line-height: 1.6;
-                 }
+            color: #555;
+            line-height: 1.6;
+        }
 
         .button-container {
-                      text-align: center;
-                      margin-top: 40px;
-                  }
+            text-align: center;
+            margin-top: 40px;
+        }
 
         button {
             padding: 10px 20px;
@@ -58,11 +58,11 @@
 
 <body>
 <h1>最高得分党派</h1>
-<div class="party - info" id="highestPartyInfo">
+<div class="party-info" id="highestPartyInfo">
     <h2 id="highestPartyName"></h2>
     <p id="highestPartyDescription"></p>
 </div>
-<div class="button - container">
+<div class="button-container">
     <button id="showLowestParty">查看最低得分党派</button>
 </div>
 <script>
@@ -70,15 +70,15 @@
     const partyInfo = {
         SPD: {
             name: "德国社会民主党（SPD） 代表人物：奥拉夫・朔尔茨 现任德国总理",
-            description: "德国社会民主党是德国历史最为悠久的政党之一，其历史可追溯到19世纪。在政治理念上，该党坚定主张社会公平，认为社会中的每个人都应享有平等的机会和资源。在福利国家建设方面，它致力于构建全面的社会保障体系，涵盖医疗、养老、失业救济等多个领域，以保障公民的基本生活。在经济领域，支持一定程度的经济干预，通过政府政策调节来促进就业、平衡贫富差距。在劳工权益方面，积极推动改善工人的工作条件和薪资待遇，是工会组织的重要政治盟友。在社会政策上，倡导多元、包容的社会环境，支持性别平等、LGBTQ+权益等议题。派别：左翼"
+            description: "德国社会民主党是德国历史最为悠久的政党之一，其历史可追溯到 19 世纪。在政治理念上，该党坚定主张社会公平，认为社会中的每个人都应享有平等的机会和资源。在福利国家建设方面，它致力于构建全面的社会保障体系，涵盖医疗、养老、失业救济等多个领域，以保障公民的基本生活。在经济领域，支持一定程度的经济干预，通过政府政策调节来促进就业、平衡贫富差距。在劳工权益方面，积极推动改善工人的工作条件和薪资待遇，是工会组织的重要政治盟友。在社会政策上，倡导多元、包容的社会环境，支持性别平等、LGBTQ+ 权益等议题。派别：左翼"
         },
         CDU_CSU: {
             name: "基督教民主联盟 - 基督教社会联盟（CDU - CSU） 代表人物：安格拉・默克尔",
-            description: "基督教民主联盟（CDU）和基督教社会联盟（CSU）组成的联盟党是德国传统的政治力量。CDU在联邦层面发挥重要作用，而CSU主要活跃于巴伐利亚州。该联盟党以基督教价值观为核心，强调道德和伦理在政治决策中的重要性。在经济政策上，支持市场经济，但也主张政府发挥一定的监管作用，以确保市场的公平竞争和稳定发展。在社会秩序方面，注重维护传统的家庭价值观和社会稳定，致力于打击犯罪和维护公共安全。在外交政策上，倾向于加强欧洲一体化进程，推动德国在国际舞台上发挥积极作用。派别：右翼"
+            description: "基督教民主联盟（CDU）和基督教社会联盟（CSU）组成的联盟党是德国传统的政治力量。CDU 在联邦层面发挥重要作用，而 CSU 主要活跃于巴伐利亚州。该联盟党以基督教价值观为核心，强调道德和伦理在政治决策中的重要性。在经济政策上，支持市场经济，但也主张政府发挥一定的监管作用，以确保市场的公平竞争和稳定发展。在社会秩序方面，注重维护传统的家庭价值观和社会稳定，致力于打击犯罪和维护公共安全。在外交政策上，倾向于加强欧洲一体化进程，推动德国在国际舞台上发挥积极作用。派别：右翼"
         },
         GRÜNE: {
-            name: "联盟90 / 绿党（GRÜNE）代表人物：罗伯特・哈贝克 现任德国副总理兼经济和气候保护部长",
-            description: "德国绿党是全球环保政治运动的先驱之一，它成立于上世纪70、80年代环保运动蓬勃发展的时期。该党将环境保护置于核心位置，主张采取积极的措施应对气候变化，如大力发展可再生能源、减少温室气体排放、推动可持续的城市规划等。在可持续发展方面，倡导绿色经济模式，鼓励企业采用环保生产方式，促进资源的循环利用。在和平主义方面，反对军事扩张和战争，主张通过外交途径解决国际争端。在社会正义议题上，关注弱势群体的权益，支持教育公平、社会福利的提升和性别平等。派别：左翼"
+            name: "联盟 90 / 绿党（GRÜNE）代表人物：罗伯特・哈贝克 现任德国副总理兼经济和气候保护部长",
+            description: "德国绿党是全球环保政治运动的先驱之一，它成立于上世纪 70、80 年代环保运动蓬勃发展的时期。该党将环境保护置于核心位置，主张采取积极的措施应对气候变化，如大力发展可再生能源、减少温室气体排放、推动可持续的城市规划等。在可持续发展方面，倡导绿色经济模式，鼓励企业采用环保生产方式，促进资源的循环利用。在和平主义方面，反对军事扩张和战争，主张通过外交途径解决国际争端。在社会正义议题上，关注弱势群体的权益，支持教育公平、社会福利的提升和性别平等。派别：左翼"
         },
         DIE_LINKE: {
             name: "德国左翼党（DIE LINKE）代表人物：罗莎・卢森堡 杰出的马克思主义理论家",
