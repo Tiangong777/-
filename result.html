@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,33 +10,51 @@
       font-family: Arial, sans-serif;
       margin: 20px;
     }
-
     h1 {
       text-align: center;
     }
-
     .chart-container {
       width: 80%;
       margin: 0 auto;
-      /* 设置最大高度，避免图表过高影响下面内容显示 */
-      max-height: 400px;
     }
-
     .party-info {
-      margin-top: 20px;
+      margin-top: 40px;
       padding: 20px;
       background-color: #f9f9f9;
       border: 1px solid #ddd;
-      /* 设置外边距底部，增加间隔 */
-      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      height: auto; /* 让容器高度自动适应内容 */
+      overflow-y: auto; /* 添加滚动条 */
     }
-
     .party-info h2 {
       margin-top: 0;
+      color: #333;
+    }
+    .party-info p {
+      color: #555;
+      line-height: 1.6;
+    }
+    .flex-container {
+      display: flex;
+      gap: 20px;
+      margin-top: 40px;
+      flex-wrap: wrap; /* 让内容在空间不足时换行 */
+    }
+
+    .flex-container > div {
+      flex: 1 1 45%; /* 确保每个容器占据适当的空间 */
+    }
+    @media (max-width: 768px) {
+      .flex-container {
+        flex-direction: column;
+      }
+      .chart-container {
+        width: 100%;
+      }
     }
   </style>
 </head>
-
 <body>
 
 <h1>问卷结果</h1>
@@ -45,16 +62,19 @@
   <canvas id="scoreChart"></canvas>
 </div>
 
-<!-- 得分最高的党派介绍 -->
-<div class="party-info" id="highestPartyInfo">
-  <h2>得分最高的党派：<span id="highestPartyName"></span></h2>
-  <p id="highestPartyDescription"></p>
-</div>
+<!-- 得分最高和最低的党派信息 -->
+<div class="flex-container">
+  <!-- 得分最高的党派介绍 -->
+  <div class="party-info" id="highestPartyInfo">
+    <h2>得分最高的党派：<span id="highestPartyName"></span></h2>
+    <p id="highestPartyDescription"></p>
+  </div>
 
-<!-- 得分最低的党派介绍 -->
-<div class="party-info" id="lowestPartyInfo">
-  <h2>得分最低的党派：<span id="lowestPartyName"></span></h2>
-  <p id="lowestPartyDescription"></p>
+  <!-- 得分最低的党派介绍 -->
+  <div class="party-info" id="lowestPartyInfo">
+    <h2>得分最低的党派：<span id="lowestPartyName"></span></h2>
+    <p id="lowestPartyDescription"></p>
+  </div>
 </div>
 
 <script>
@@ -96,6 +116,7 @@
       description: "主要活跃于巴伐利亚州，强调巴伐利亚地区的传统、文化和利益，有一定地方保护主义色彩。派别：难以简单用左右翼划分"
     }
   };
+
 
   // 找到得分最高和最低的党派
   let highestParty = { name: '', score: -Infinity };
@@ -165,11 +186,11 @@
   // 显示得分最高和最低的党派信息
   document.getElementById('highestPartyName').textContent = partyInfo[highestParty.name].name;
   document.getElementById('highestPartyDescription').textContent = partyInfo[highestParty.name].description;
+  console.log('得分最低的党派名称:', lowestParty.name);
 
   document.getElementById('lowestPartyName').textContent = partyInfo[lowestParty.name].name;
   document.getElementById('lowestPartyDescription').textContent = partyInfo[lowestParty.name].description;
 </script>
 
 </body>
-
 </html>
